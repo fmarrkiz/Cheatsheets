@@ -3,7 +3,7 @@ Day 2
 # Variables dans JVS 
 [lien](https://fr.javascript.info/variables)
 
-Une variable est un “stockage nommé” pour les données. Nous pouvons utiliser des variables pour stocker des goodies, des visiteurs et d’autres données.<br> Cela peut être fait en utilisant `var` (old school), `let` (modern use) ou `const` (pour des variables dont la valeur ne peut pas être modifiée)
+Une variable est un “stockage nommé” pour les données. Nous pouvons utiliser des variables pour stocker des goodies, des visiteurs et d’autres données.<br> Cela peut être fait en utilisant `var` (old school), `let` (use-strict) ou `const` (pour des variables dont la valeur ne peut pas être modifiée)
 
 `let` s'exécute sur le bloc courant
 
@@ -338,6 +338,7 @@ La plupart de ces règles sont faciles à comprendre et à mémoriser. Les excep
 - "0" et les espaces dans les chaines de caractères comme " " sont “true” en booléen.
  
 # Opérateurs de base, mathématiques
+[lien](https://fr.javascript.info/operators)
 
 opérateurs connus : additions `+`, multiplications `*`, soustractions `-`,...
 
@@ -509,7 +510,198 @@ Mais n’écrivez pas le code comme ça, ça le rend moins lisible.
 
 
 
+#### Affectation chaînées
 
+On peut donc chaîner des affectations
+
+exemple :
+```javascript
+let a, b, c;
+
+a = b = c = 2 + 2;
+
+alert( a ); // 4
+alert( b); // 4
+alert( c ); // 4
+```
+mais pour des raisons de lisibilité, il vaut mieux diviser ce code en quelques lignes
+```javascript
+c = 2 +2;
+b = c;
+a = c;
+```
+
+### Modification sur place
+
+Pour appliquer un opérateur à une variable et y stocker le nouveau résultat.
+
+exemple :
+```javascript
+let n = 2;
+n = n + 5;
+n = n * 2;
+```
+
+Peut être raccourcie en utilisant `+=` et `*=` :
+
+```javascript
+let n = 2;
+n += 5; // n =7
+n *= 2; // n = 14 
+
+alert( n); // 14
+```
+
+Il existe des opérateurs de "**modification et assignation**" courts pour tous les opérateurs arithmétiques et binaires : `/=`, `-=` etc.
+
+Ces opérateurs ont la même précédence que `=`
+
+```javascript
+let n = 2;
+n *= 3 + 5; // identique à n *= 8
+alert( n ); // 16
+```
+
+``` javescript
+let a= 2;
+let x = 1 + (a *=2);
+```
+
+### Incrémentation/ décrémentation
+
+L'augmentation ou la diminution d'un nombre par `1` est identique à `++` et à `--`
+
+- **Incrémentation**
+```javascript
+let counter = 2;
+counter++; // identique à counter = counter + 1
+alert( counter ); //3
+```
+
+- **Décrémentation**
+```javascript
+let counter = 2;
+counter++; // identique à counter = counter - 1
+alert( counter ); // 1
+```
+
+##### Attention!
+L'incrémentation/ décrémentation ne peut être appliquée qu'à une *variable*. <br>`5++` donnera une erreur.
+
+Les opérateurs `++` et `--`peuvent être placés à la fois
+- "forme postfixe" : `counter++` renvoie l'**ancienne valeur** (avant l'incrémentation/décrementation)
+- "forme préfixe" : `++counter` renvoie la **nouvelle valeur**
+
+Ces opérateurs font la même chose : augmenter le `counter` de `1`.
+
+-----
+
+   Si le résultat de l’incrémentation/décrémentation n’est pas utilisé, alors il n’y a pas de différence dans la forme à utiliser :
+
+```javascript
+let counter = 0;
+counter++;
+++counter;
+alert( counter ); // 2, les lignes ci-dessus ont fait la même chose
+```
+
+Si nous souhaitons augmenter la valeur et utiliser le résultat de l’opérateur immédiatement, nous avons besoin de la forme préfixe :
+
+```javscript
+let counter = 0;
+alert( ++counter ); // 1
+```
+
+Si nous souhaitons incrémenter, mais utiliser la valeur précédente, alors nous avons besoin de la forme postfixe :
+
+```javascript
+let counter = 0;
+alert( counter++ ); // 0
+```
+
+
+Les opérateurs `++/--` peuvent également être utilisés dans une expression. Leur précédence est plus élevée que la plupart des autres opérations arithmétiques.
+
+Par exemple :
+
+```javscript
+let counter = 1;
+alert( 2 * ++counter ); // 4
+```
+
+
+A comparer avec :
+
+```javascript
+let counter = 1;
+alert( 2 * counter++ ); // 2, counter++ renvoie "l'ancienne" valeur
+```
+
+Bien que techniquement acceptable, une telle notation rend le code moins lisible. Une ligne fait plusieurs choses – pas bien.
+
+Lors de la lecture du code, un scan oculaire “vertical” rapide peut facilement manquer un tel counter++, et il n’est pas évident que la variable augmente.
+
+Le style “une ligne – une action” est conseillé :
+
+```javscript
+let counter = 1;
+alert( 2 * counter );
+counter++;
+```
+
+```jvs
+let a = 1, b = 1;
+
+alert( ++a ); // 2, la forme préfixe renvoie la nouvelle valeur
+alert( b++ ); // 1, la forme postfixe renvoie l'ancienne valeur
+
+alert( a ); // 2, incrémenté une fois
+alert( b ); // 2, incrémenté une fois
+```
+
+-------- 
+
+### Opérateurs binaires
+
+- Les opérateurs binaires traitent les argument comme des nombres entiers de 32 bits et travaillent au niveau de leur représentation binaire.
+- pas spécifiques à JVS
+
+Liste des opérateurs :
+
+- AND ( & )
+- OR ( | )
+- XOR ( ^ )
+- NOT ( ~ )
+- LEFT SHIFT ( << )
+- RIGHT SHIFT ( >> )
+- ZERO-FILL RIGHT SHIFT ( >>> )
+
+Ces opérateurs sont rarement utilisés en JVS
+
+
+### Opérateur virgule
+
+
+L’opérateur virgule `,` est l’un des opérateurs les plus rares et les plus inhabituels. Parfois, il faut écrire un code plus court, il faut donc le connaître pour comprendre ce qui se passe.
+
+L’opérateur virgule nous permet d’évaluer plusieurs expressions en les divisant par une virgule `,`. Chacun d’eux est évalué, mais seulement le résultat de la dernière est renvoyé.
+
+```javascript
+let a = (1 + 2, 3 + 4);
+
+alert( a ); //7 (le résultat de 3 + 4)
+```
+
+La 1ère expression `1 + 2` est évaluée mais son résultat n'est pas utilisé, puis `3 + 4` est évalué et renvoyé comme résultat.
+
+La virgule a une très faible précédence, inférieure à `=`
+
+<!---- A revoir >
+```javascript
+a = 1 + 2, 3 + 4 // évalue d'abord ` a = 3, 7` puis `=` assigne `a = 3` et le reste est ignoré
+```
+
+L'opérateur virgule est utilisé dans des frameworks JavaScript dans des constructions complexes pour placer plusieurs actions sur une seule ligne. A nouveau, attention à la lisibilité!
 
 
 
